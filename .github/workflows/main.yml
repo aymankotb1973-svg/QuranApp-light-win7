@@ -1,33 +1,15 @@
 name: Build Yusr Lite APK
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:
+on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - name: Build with Buildozer
+        uses: ArtemSerebrenninkov/buildozer-action@v1
         with:
-          python_version: '3.11'
-
-      - name: Install Dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo6 cmake libffi-dev libssl-dev
-          pip install --user --upgrade buildozer Cython==0.29.33
-
-      - name: Build APK with Buildozer
-        run: |
-          yes | buildozer -v android debug
-
+          command: buildozer android debug
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
