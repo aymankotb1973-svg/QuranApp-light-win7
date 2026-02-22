@@ -14,12 +14,13 @@ jobs:
       - name: Install Buildozer and Dependencies
         run: |
           sudo apt update
-          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+          # غيرنا libtinfo5 لـ libtinfo6 هنا عشان يرضى يشتغل
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo6 cmake libffi-dev libssl-dev
           pip install --user --upgrade buildozer Cython==0.29.33
 
       - name: Build APK with Buildozer
         run: |
-          # السطر ده هو اللي بيطبخ الـ APK بجد
+          # السطر ده بيوافق على الرخص وبيبدأ البناء
           yes | buildozer -v android debug
         
       - name: Upload APK
