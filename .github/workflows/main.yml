@@ -6,12 +6,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build with Buildozer
-        uses: GearScrecher/buildozer-action@v2
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          buildozer_version: stable
-          python_version: 3.11
+          python_version: '3.11'
 
+      - name: Install Buildozer and Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+          pip install --user --upgrade buildozer Cython==0.29.33
+
+      - name: Build APK with Buildozer
+        run: |
+          # السطر ده هو اللي بيطبخ الـ APK بجد
+          yes | buildozer -v android debug
+        
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
