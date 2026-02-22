@@ -1,41 +1,35 @@
-[app]
+name: Build Yusr Lite APK
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
 
-# (title) اسم التطبيق اللي هيظهر للمستخدم
-title = Yusr Lite
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-# (package.name) اسم الحزمة (بدون مسافات)
-package.name = yusrlite
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python_version: '3.11'
 
-# (package.domain) النطاق الخاص بك
-package.domain = org.yusr.lite
+      - name: Install Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo6 cmake libffi-dev libssl-dev
+          pip install --user --upgrade buildozer Cython==0.29.33
 
-# (source.dir) مكان الكود (النقطة تعني المجلد الحالي)
-source.dir = .
+      - name: Build APK with Buildozer
+        run: |
+          yes | buildozer -v android debug
 
-# (source.include_exts) الملفات اللي هتدخل في الـ APK
-source.include_exts = py,png,jpg,ttf,json,db
-
-# (version) رقم الإصدار (اللي كان عامل المشكلة!)
-version = 0.1
-
-# (requirements) المكتبات المطلوبة للتشغيل
-requirements = python3,kivy==2.3.0,arabic-reshaper,python-bidi
-
-# (orientation) وضع الشاشة
-orientation = portrait
-
-# (fullscreen) ملء الشاشة
-fullscreen = 1
-
-# --- إعدادات الأندرويد الضرورية ---
-android.api = 33
-android.minapi = 21
-android.ndk = 25b
-android.archs = arm64-v8a, armeabi-v7a
-android.accept_sdk_license = True
-
-# (log_level) عشان نشوف التفاصيل لو حصلت مشكلة
-log_level = 2
-
-[buildozer]
-warn_on_root = 1
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Yusr-Lite-Package
+          path: bin/*.apk
