@@ -1,0 +1,9 @@
+{
+    "quran_text_display_font_family": "Amiri Quran",
+    "font_size": 32,
+    "scale_factor": 0.7513148009015775,
+    "vad_aggressiveness_mode": 1,
+    "page_bg_color": "#ffff7f",
+    "show_aya_markers": true,
+    "justify_text": true
+}
