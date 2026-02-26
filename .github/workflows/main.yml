@@ -17,7 +17,7 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3-pip build-essential git python3 python3-dev ffmpeg libgstreamer1.0-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev portaudio19-dev libportaudio2 openjdk-17-jdk unzip zip
+          sudo apt-get install -y python3-pip build-essential git python3 python3-dev ffmpeg libgstreamer1.0-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev portaudio19-dev libportaudio2 openjdk-17-jdk unzip zip autoconf libtool
           sudo apt-get install -y libsqlite3-dev sqlite3 bzip2 libbz2-dev libssl-dev openssl libgdbm-dev libgdbm-compat-dev liblzma-dev libreadline-dev libncursesw5-dev libffi-dev uuid-dev autopoint libltdl-dev
           pip install --upgrade pip
           # تحديث Cython ليتوافق مع Kivy 2.3.1
@@ -31,10 +31,14 @@ jobs:
             cp main_mobile.py main.py
           fi
 
-          # 2. تنظيف الكاش لضمان عدم وجود ملفات تالفة من المحاولات السابقة
+          # 2. إصلاح مشكلة repositories.cfg التي تسبب exit code 100
+          mkdir -p ~/.android
+          touch ~/.android/repositories.cfg
+
+          # 3. تنظيف الكاش لضمان عدم وجود ملفات تالفة من المحاولات السابقة
           rm -rf .buildozer
           
-          # 3. البناء مع الموافقة القسرية على التراخيص (حل نهائي لمشكلة exit code 100)
+          # 4. البناء مع الموافقة القسرية على التراخيص (حل نهائي لمشكلة exit code 100)
           yes | buildozer -v android debug
       - name: Upload APK
         uses: actions/upload-artifact@v4
