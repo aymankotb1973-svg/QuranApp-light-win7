@@ -3,9 +3,9 @@ title = Yusr Lite
 package.name = yusrlite
 package.domain = org.yusr.lite
 source.dir = .
-source.include_exts = py,png,jpg,ttf,json,db
+source.include_exts = py,png,jpg,ttf,json,db,sqlite,ico,mp3
 # هنا شيلنا الـ Vosk عشان دي نسخة لايت
-requirements = python3,kivy==2.3.1,arabic-reshaper,python-bidi,requests
+requirements = python3,kivy==2.3.1,kivymd,arabic-reshaper,python-bidi,requests
 orientation = portrait
 fullscreen = 1
 android.archs = arm64-v8a, armeabi-v7a
