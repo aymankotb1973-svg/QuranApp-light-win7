@@ -12,27 +12,23 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.10'
 
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3-pip build-essential git python3 python3-dev ffmpeg libgstreamer1.0-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev
+          sudo apt-get install -y python3-pip build-essential git python3 python3-dev ffmpeg libgstreamer1.0-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev portaudio19-dev libportaudio2
           sudo apt-get install -y libsqlite3-dev sqlite3 bzip2 libbz2-dev libssl-dev openssl libgdbm-dev libgdbm-compat-dev liblzma-dev libreadline-dev libncursesw5-dev libffi-dev uuid-dev autopoint libltdl-dev
           pip install --upgrade pip
           pip install setuptools wheel Cython==0.29.33 buildozer kivy
 
       - name: Build with Buildozer
         run: |
-          # 1. تنظيف أي مخلفات قديمة
-          rm -rf .buildozer/
-          
-          # 2. تجهيز التراخيص والموافقة التلقائية
-          mkdir -p ~/.android && touch ~/.android/repositories.cfg
-          yes | buildozer android debug || true
-          
-          # 3. البناء الفعلي مع إظهار كافة التفاصيل (Verbose) لسهولة كشف الأخطاء
-          buildozer android debug --verbose
+          # 1. تحديث حزم الأندرويد وقبول التراخيص
+          buildozer -v android update
+
+          # 2. البناء الفعلي مع إظهار كافة التفاصيل
+          buildozer -v android debug
           
       - name: Upload APK
         uses: actions/upload-artifact@v4
