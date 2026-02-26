@@ -77,7 +77,10 @@ def resource_path(relative_path):
         base_path = os.path.dirname(os.path.abspath(__file__))
     return os.path.join(base_path, relative_path)
 
-from PyQt5.QtGui import QColor
+try:
+    from PyQt5.QtGui import QColor
+except ImportError:
+    QColor = None
 
 # --- NEW: Centralized resource paths ---
 DEFAULT_FONT_SIZE = 22
@@ -87,7 +90,7 @@ DEFAULT_BG_COLOR = "#e6f2ff"
 ERROR_SOUND_PATH = resource_path(os.path.join("sounds", "error.wav"))
 UTHMAN_FONT_FILE = resource_path(os.path.join("fonts", "uthmanic_hafs_v20.ttf"))
 AYAH_NUMBER_FONT_FILE = resource_path(os.path.join("fonts", "uthmanic.ttf")) # <--- NEW LINE
-QURAN_DATA_FILE = resource_path(os.path.join("data", "quran_minified.json"))
+QURAN_DATA_FILE = resource_path(os.path.join("data", "quran-data.json"))
 QURAN_TEXT_BY_PAGE_FILE = resource_path(os.path.join("data", "quran_text_by_page.json"))
 MINI_AYA_DICT_NOSH_FILE = resource_path(os.path.join("data", "mini_aya_dict_nosh.json"))
 MINI_WORDS_DICT_FULL_FILE = resource_path(os.path.join("data", "mini_words_dict_full.json"))
