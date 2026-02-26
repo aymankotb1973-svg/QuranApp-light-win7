@@ -24,12 +24,14 @@ jobs:
 
       - name: Build with Buildozer
         run: |
-          # 1. تحديث حزم الأندرويد وقبول التراخيص
-          buildozer -v android update
-
-          # 2. البناء الفعلي مع إظهار كافة التفاصيل
-          buildozer -v android debug
+          # 1. تجهيز ملف التشغيل الصحيح (استخدام نسخة الموبايل)
+          if [ -f "main_mobile.py" ]; then
+            mv main.py main_desktop_backup.py || true
+            cp main_mobile.py main.py
+          fi
           
+          # 2. البناء مع الموافقة التلقائية على التراخيص
+          yes | buildozer -v android debug
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
