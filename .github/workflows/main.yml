@@ -3,10 +3,11 @@ on: [push]
 
 jobs:
   build:
-    runs-on: ubuntu-22.04 # تحديد نسخة مستقرة من لينكس
+    runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -17,22 +18,22 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-pip build-essential git python3 python3-dev ffmpeg libgstreamer1.0-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev
-          sudo apt-get install -y libsqlite3-dev sqlite3 bzip2 libbz2-dev libssl-dev openssl libgdbm-dev libgdbm-compat-dev liblzma-dev libreadline-dev libncursesw5-dev libffi-dev uuid-dev
+          sudo apt-get install -y libsqlite3-dev sqlite3 bzip2 libbz2-dev libssl-dev openssl libgdbm-dev libgdbm-compat-dev liblzma-dev libreadline-dev libncursesw5-dev libffi-dev uuid-dev autopoint libltdl-dev
           pip install --upgrade pip
-          pip install buildozer cython==0.29.33 kivy  # تحديد نسخ مستقرة
+          pip install setuptools wheel Cython==0.29.33 buildozer kivy
 
       - name: Build with Buildozer
         run: |
-          # 1. مسح أي بقايا بناء قديم (لو موجودة)
+          # 1. تنظيف أي مخلفات قديمة
           rm -rf .buildozer/
           
-          # 2. إجبار النظام على قبول تراخيص أندرويد
+          # 2. تجهيز التراخيص والموافقة التلقائية
           mkdir -p ~/.android && touch ~/.android/repositories.cfg
           yes | buildozer android debug || true
           
-          # 3. التشغيل الفعلي مع تخطي مشاكل التفاعل
-          buildozer android debug
-
+          # 3. البناء الفعلي مع إظهار كافة التفاصيل (Verbose) لسهولة كشف الأخطاء
+          buildozer android debug --verbose
+          
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
